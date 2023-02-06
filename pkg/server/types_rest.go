@@ -1,0 +1,122 @@
+package server
+
+import (
+	"github.com/iotaledger/inx-api-core-v0/pkg/milestone"
+	"github.com/iotaledger/iota.go/trinary"
+)
+
+// infoResponse defines the response of a GET info REST API call.
+type infoResponse struct {
+	AppName                            string          `json:"appName"`
+	AppVersion                         string          `json:"appVersion"`
+	LatestMilestone                    trinary.Hash    `json:"latestMilestone"`
+	LatestMilestoneIndex               milestone.Index `json:"latestMilestoneIndex"`
+	LatestSolidSubtangleMilestone      trinary.Hash    `json:"latestSolidSubtangleMilestone"`
+	LatestSolidSubtangleMilestoneIndex milestone.Index `json:"latestSolidSubtangleMilestoneIndex"`
+	IsSynced                           bool            `json:"isSynced"`
+	Health                             bool            `json:"isHealthy"`
+	MilestoneStartIndex                milestone.Index `json:"milestoneStartIndex"`
+	LastSnapshottedMilestoneIndex      milestone.Index `json:"lastSnapshottedMilestoneIndex"`
+	Neighbors                          uint            `json:"neighbors"`
+	Time                               int64           `json:"time"`
+	Tips                               uint32          `json:"tips"`
+	TransactionsToRequest              int             `json:"transactionsToRequest"`
+	Features                           []string        `json:"features"`
+	CoordinatorAddress                 trinary.Hash    `json:"coordinatorAddress"`
+}
+
+// transactionsResponse struct.
+type transactionsResponse struct {
+	Bundle            trinary.Hash    `json:"bundle,omitempty"`
+	Address           trinary.Hash    `json:"address,omitempty"`
+	Tag               trinary.Hash    `json:"tag,omitempty"`
+	Approvee          trinary.Hash    `json:"approvee,omitempty"`
+	TransactionHashes []trinary.Hash  `json:"txHashes"`
+	LedgerIndex       milestone.Index `json:"ledgerIndex"`
+}
+
+// trytesResponse struct.
+type trytesResponse struct {
+	TxHash trinary.Hash   `json:"txHash"`
+	Trytes trinary.Trytes `json:"trytes"`
+}
+
+// transactionInclusionStateResponse struct.
+type transactionInclusionStateResponse struct {
+	TxHash      trinary.Hash    `json:"txHash"`
+	Included    bool            `json:"included"`
+	Confirmed   bool            `json:"confirmed"`
+	Conflicting bool            `json:"conflicting"`
+	LedgerIndex milestone.Index `json:"ledgerIndex"`
+}
+
+// addressWasSpentResponse struct.
+type addressWasSpentResponse struct {
+	Address     trinary.Hash    `json:"address"`
+	WasSpent    bool            `json:"wasSpent"`
+	LedgerIndex milestone.Index `json:"ledgerIndex"`
+}
+
+// balanceResponse struct.
+type balanceResponse struct {
+	Address     trinary.Hash    `json:"address"`
+	Balance     string          `json:"balance"`
+	LedgerIndex milestone.Index `json:"ledgerIndex"`
+}
+
+// ledgerStateResponse struct.
+type ledgerStateResponse struct {
+	Balances    map[trinary.Hash]string `json:"balances"`
+	LedgerIndex milestone.Index         `json:"ledgerIndex"`
+}
+
+// ledgerDiffResponse struct.
+type ledgerDiffResponse struct {
+	AddressDiffs map[trinary.Hash]string `json:"addressDiffs"`
+	LedgerIndex  milestone.Index         `json:"ledgerIndex"`
+}
+
+// txHashWithValue struct.
+type txHashWithValue struct {
+	TxHash     trinary.Hash `json:"txHash"`
+	TailTxHash trinary.Hash `json:"tailTxHash"`
+	Bundle     trinary.Hash `json:"bundle"`
+	Address    trinary.Hash `json:"address"`
+	Value      string       `json:"value"`
+}
+
+func (tx *txHashWithValue) Item() Container {
+	return tx
+}
+
+// txWithValue struct.
+type txWithValue struct {
+	TxHash  trinary.Hash `json:"txHash"`
+	Address trinary.Hash `json:"address"`
+	Index   uint32       `json:"index"`
+	Value   string       `json:"value"`
+}
+
+func (tx *txWithValue) Item() Container {
+	return tx
+}
+
+// bundleWithValue struct.
+type bundleWithValue struct {
+	Bundle     trinary.Hash   `json:"bundle"`
+	TailTxHash trinary.Hash   `json:"tailTxHash"`
+	LastIndex  uint32         `json:"lastIndex"`
+	Txs        []*txWithValue `json:"transactions"`
+}
+
+func (b *bundleWithValue) Item() Container {
+	return b
+}
+
+// ledgerDiffExtendedResponse struct.
+type ledgerDiffExtendedResponse struct {
+	ConfirmedTxWithValue      []*txHashWithValue      `json:"confirmedTransactionsWithValue"`
+	ConfirmedBundlesWithValue []*bundleWithValue      `json:"confirmedBundlesWithValue"`
+	AddressDiffs              map[trinary.Hash]string `json:"addressDiffs"`
+	LedgerIndex               milestone.Index         `json:"ledgerIndex"`
+}
