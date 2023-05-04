@@ -15,7 +15,7 @@ require (
 	github.com/prometheus/client_golang v1.14.0
 	go.etcd.io/bbolt v1.3.7
 	go.uber.org/atomic v1.10.0
-	go.uber.org/dig v1.16.1
+	go.uber.org/dig v1.17.0
 )
 
 require (
